@@ -1,0 +1,51 @@
+schema_version: 1
+
+context:
+  name: de-bundesrat
+  version: 0.1.0
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/de-bundesrat-${{ version }}.tar.gz
+  sha256: d817a1e6f804ad06a3abb7283b5bca16c0293abecfaa3d9c05055b81d513386a
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - poetry
+  run:
+    - python >=${{ python_min }}
+    - python-dateutil
+    - urllib3 >=1.25.3
+
+tests:
+  - python:
+      imports:
+        - deutschland.bundesrat
+      python_version: ${{ python_min }}.*
+  - requirements:
+      run:
+        - pip
+        - python ${{ python_min }}.*
+    script:
+      - pip check
+
+about:
+  summary: "Bundesrat: Live Informationen"
+  license: Apache-2.0
+  license_file:
+    - LICENSE
+  homepage: https://github.com/bundesAPI/bundesrat-api
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
